@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  myapp:
+    image: mbilalkhan/practice-repo:1.2.13-40
+    container_name: myapp-container
+    ports:
+      - "8080:80"  # Change if needed
+    restart: always
