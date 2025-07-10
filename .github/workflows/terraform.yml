@@ -37,7 +37,7 @@ jobs:
           subnet_cidr_block = "10.0.10.0/24"
           availability_zone = "ap-south-1a"
           env_prefix = "dev"
-          allowed_ips = ["${{ secrets.MY_IP }}", "${{RUNNER_IP}}"]
+          allowed_ips = ["${{ secrets.MY_IP }}", "${{env.RUNNER_IP}}"]
           instance_type = "t2.micro"
           ssh_key = "${{ secrets.SSH_KEY }}"
           ssh_key_private = <<EOKEY
