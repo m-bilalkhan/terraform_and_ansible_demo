@@ -135,6 +135,9 @@ resource "null_resource" "configure_server" {
     command = <<EOT
       echo '${var.ssh_key_private}' > temp_key.pem
       chmod 600 temp_key.pem
+      pwd
+      ls -lah
+      ls -lah playbook.yaml
       ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem playbook.yaml
       rm temp_key.pem
     EOT
