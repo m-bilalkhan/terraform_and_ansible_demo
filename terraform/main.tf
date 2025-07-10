@@ -132,15 +132,8 @@ resource "null_resource" "configure_server" {
   }
   provisioner "local-exec" {
     working_dir = "../ansible/"
-    command = <<EOT
-      echo '${var.ssh_key_private}' > temp_key.pem
-      chmod 600 temp_key.pem
-      pwd
-      ls -lah
-      ls -lah playbook.yaml
-      ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem playbook.yaml
-      rm temp_key.pem
-    EOT
+    command = "echo '${var.ssh_key_private}' > temp_key.pem && chmod 600 temp_key.pem && pwd && ls -lah && ls -lah playbook.yaml && ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem playbook.yaml && rm temp_key.pem"
+
   }
 }
 
