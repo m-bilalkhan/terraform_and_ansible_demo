@@ -10,7 +10,7 @@ variable "availability_zone" {}
 variable "env_prefix" {}
 variable "allowed_ips" {
   description = "List of IPs allowed to access the server via SSH"
-  type        = list(string)
+  type    = list(string)
 }
 variable "instance_type" {}
 variable "ssh_key" {}
@@ -132,7 +132,12 @@ resource "null_resource" "configure_server" {
   }
   provisioner "local-exec" {
     working_dir = "../ansible/"
-    command     = "ansible-playbook --inventory ${aws_instance.myapp-server.public_ip}, --private-key ${var.ssh_key_private} playbook.yaml"
+    command = <<EOT
+      echo '${var.ssh_key_private}' > temp_key.pem
+      chmod 600 temp_key.pem
+      ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem playbook.yaml
+      rm temp_key.pem
+    EOT
   }
 }
 
