@@ -1,0 +1,8 @@
+vpc_cidr_block = "10.0.0.0/16"
+subnet_cidr_block = "10.0.10.0/24"
+availability_zone = "ap-south-1a"
+env_prefix = "dev"
+my_ip = "180.149.212.197/32"
+instance_type = "t2.micro"
+ssh_key = "main-development-key-pair"
+ssh_key_private = "/home/muhammad-bilal-khan/.ssh/id_rsa"

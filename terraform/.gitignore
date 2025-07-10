@@ -1,0 +1,7 @@
+# Ignore only secret or environment-specific tfvars
+*.tfvars.*
+
+# Still ignore tfstate files and local terraform dirs
+.terraform/*
+*.tfstate
+*.tfstate.*
