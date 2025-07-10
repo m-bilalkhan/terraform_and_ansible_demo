@@ -8,7 +8,10 @@ variable "vpc_cidr_block" {
 variable "subnet_cidr_block" {}
 variable "availability_zone" {}
 variable "env_prefix" {}
-variable "allowed_ips" {}
+variable "allowed_ips" {
+  description = "List of IPs allowed to access the server via SSH"
+  type        = list(string)
+}
 variable "instance_type" {}
 variable "ssh_key" {}
 variable "ssh_key_private" {}
