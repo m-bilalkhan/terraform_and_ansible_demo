@@ -66,7 +66,7 @@ resource "aws_security_group" "demo-app-sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "TCP"
-    cidr_blocks = [var.allowed_ips]
+    cidr_blocks = var.allowed_ips
   }
 
   ingress {
