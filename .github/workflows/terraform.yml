@@ -27,7 +27,7 @@ jobs:
 
     - name: Get GitHub runner IP
       run: |
-        ip=$(curl -s https://checki.amazonaws.com)
+        ip=$(curl -s https://checkip.amazonaws.com)
         echo "runner_ip=$ip/32" >> $GITHUB_ENV
 
     - name: Writing tfvars
