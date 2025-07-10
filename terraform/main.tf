@@ -8,7 +8,7 @@ variable "vpc_cidr_block" {
 variable "subnet_cidr_block" {}
 variable "availability_zone" {}
 variable "env_prefix" {}
-variable "my_ip" {}
+variable "allowed_ips" {}
 variable "instance_type" {}
 variable "ssh_key" {}
 variable "ssh_key_private" {}
@@ -63,7 +63,7 @@ resource "aws_security_group" "demo-app-sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "TCP"
-    cidr_blocks = [var.my_ip]
+    cidr_blocks = [var.allowed_ips]
   }
 
   ingress {

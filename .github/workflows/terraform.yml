@@ -25,6 +25,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Get GitHub runner IP
+      id: ip
+      run: |
+        ip=$(curl -s https://checki.amazonaws.com)
+        echo "runner_ip=$ip/32" >> $GITHUB_ENV
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -34,7 +40,7 @@ jobs:
           subnet_cidr_block = "10.0.10.0/24"
           availability_zone = "ap-south-1a"
           env_prefix = "dev"
-          my_ip = "${{ secrets.MY_IP }}"
+          allowed_ips = ["${ secrets.MY_IP}", "${RUNNER_IP}"]
           instance_type = "t2.micro"
           ssh_key = "${{ secrets.SSH_KEY }}"
           ssh_key_private = "${{ secrets.SSH_KEY_PRIVATE }}"
