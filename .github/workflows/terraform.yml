@@ -52,10 +52,11 @@ jobs:
           allowed_ips = ["${{ secrets.MY_IP }}", "${{env.RUNNER_IP}}"]
           instance_type = "t2.micro"
           ssh_key = "${{ secrets.SSH_KEY }}"
-          ssh_key_private = <<EOKEY
-              ${{ secrets.SSH_KEY_PRIVATE }}
-            EOKEY
-          EOF
+
+    - name: Get SSH KEY AND SET PERMISSION
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_KEY_PRIVATE }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init

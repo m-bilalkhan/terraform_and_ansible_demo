@@ -14,7 +14,6 @@ variable "allowed_ips" {
 }
 variable "instance_type" {}
 variable "ssh_key" {}
-variable "ssh_key_private" {}
 
 resource "aws_vpc" "demo-app-vpc" {
   cidr_block           = var.vpc_cidr_block
@@ -131,7 +130,8 @@ resource "null_resource" "configure_server" {
     server_ip = aws_instance.myapp-server.public_ip
   }
   provisioner "local-exec" {
-    command = "bash run_ansible.sh '${var.ssh_key_private}' '${aws_instance.myapp-server.public_ip}'"
+    working_dir = "../ansible/"
+    command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa playbook.yaml"
   }
 }
 
