@@ -52,8 +52,6 @@
 
 - name: Start Docker Containers
   hosts: all
-  become: yes
-  become_user: bilal
   vars_files:
     - project-vars
   roles:
