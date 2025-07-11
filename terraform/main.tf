@@ -131,14 +131,16 @@ resource "null_resource" "configure_server" {
     server_ip = aws_instance.myapp-server.public_ip
   }
   provisioner "local-exec" {
-    working_dir = "../ansible/"
-    command = <<EOT
-        echo "${var.ssh_key_private}" > temp_key.pem
-        chmod 600 temp_key.pem
-        ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem -u ubuntu ./playbook.yaml
-        rm temp_key.pem
-      EOT
-    }
+  command = <<EOT
+      echo "${var.ssh_key_private}" > ../ansible/temp_key.pem
+      chmod 600 ../ansible/temp_key.pem
+      ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' \
+                       --private-key ../ansible/temp_key.pem \
+                       -u ubuntu \
+                       ../ansible/playbook.yaml
+      rm ../ansible/temp_key.pem
+    EOT
+  }
 }
 
 output "ec2_public_ip" {
