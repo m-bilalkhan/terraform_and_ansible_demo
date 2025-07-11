@@ -131,7 +131,6 @@ resource "null_resource" "configure_server" {
     server_ip = aws_instance.myapp-server.public_ip
   }
   provisioner "local-exec" {
-    working_dir = "../ansible/"
     command = "bash run_ansible.sh '${var.ssh_key_private}' '${aws_instance.myapp-server.public_ip}'"
   }
 }

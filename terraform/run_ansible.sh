@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ../ansible/
 set -e
 echo "$1" > temp_key.pem
 chmod 600 temp_key.pem
