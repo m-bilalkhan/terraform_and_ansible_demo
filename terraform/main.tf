@@ -131,8 +131,7 @@ resource "null_resource" "configure_server" {
   }
   provisioner "local-exec" {
     working_dir = "../ansible/"
-    command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa -u ec2-user -m raw -a python3 --version"
-    # command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa -u ec2-user playbook.yaml"
+    command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa -u ec2-user playbook.yaml"
   }
 }
 
