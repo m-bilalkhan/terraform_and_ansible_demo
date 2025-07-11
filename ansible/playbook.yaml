@@ -1,6 +1,6 @@
 ---
 - name: Wait For SSH To Open
-  hosts: tag_Name_dev_server
+  hosts: all
   gather_facts: no
   tasks:
     - name: Wait for ssh to open
@@ -15,7 +15,7 @@
 
 
 - name: Install Docker and Docker Compose v2
-  hosts: tag_Name_dev_server
+  hosts: all
   become: yes
   vars:
     compose_plugin_path: /usr/libexec/docker/cli-plugins/docker-compose
@@ -45,13 +45,13 @@
         mode: '0755'
 
 - name: Create new linux user
-  hosts: tag_Name_dev_server
+  hosts: all
   become: yes
   roles:
     - create_user
 
 - name: Start Docker Containers
-  hosts: tag_Name_dev_server
+  hosts: all
   become: yes
   become_user: bilal
   vars_files:
