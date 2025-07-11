@@ -132,7 +132,7 @@ resource "null_resource" "configure_server" {
   }
   provisioner "local-exec" {
     working_dir = "../ansible/"
-    command =  command = <<EOT
+    command = <<EOT
         echo "${var.ssh_key_private}" > temp_key.pem
         chmod 600 temp_key.pem
         ansible-playbook --inventory '${aws_instance.myapp-server.public_ip},' --private-key temp_key.pem -u ubuntu playbook.yaml
