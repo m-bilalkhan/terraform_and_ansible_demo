@@ -7,7 +7,7 @@
 - name: Copy Docker Compose file to EC2 instance
   copy:
     src: "docker-compose.yaml"
-    dest: "/home/ec2-user/docker-compose.yml"
+    dest: "/home/bilal/docker-compose.yml"
     owner: bilal
     group: bilal
     mode: '0644'
