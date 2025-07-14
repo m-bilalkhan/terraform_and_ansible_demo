@@ -21,6 +21,13 @@ jobs:
         shell: bash
 
     steps:
+    - name: Fail if not on main branch
+      run: |
+        echo "Branch: ${GITHUB_REF##*/}"
+        if [ "${GITHUB_REF##*/}" != "main" ]; then
+          echo "⛔ This workflow can only be run on the main branch."
+          exit 1
+        fi
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
