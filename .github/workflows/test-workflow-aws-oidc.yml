@@ -1,13 +1,7 @@
-name: 'Terraform'
+name: Test Deploy AWS Infrastructure via OIDC
 
 on:
   workflow_dispatch:
-
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
 
 permissions:
   contents: read
@@ -24,13 +18,13 @@ jobs:
         shell: bash
 
     steps:
-    # - name: Fail if not on main branch
-    #   run: |
-    #     echo "Branch: ${GITHUB_REF##*/}"
-    #     if [ "${GITHUB_REF##*/}" != "main" ]; then
-    #       echo "⛔ This workflow can only be run on the main branch."
-    #       exit 1
-    #     fi
+    - name: Fail if not on AWS_OIDC branch
+      run: |
+        echo "Branch: ${GITHUB_REF##*/}"
+        if [ "${GITHUB_REF##*/}" != "aws_oidc_configration" ]; then
+          echo "⛔ This workflow can only be run on the aws_oidc_configration branch."
+          exit 1
+        fi
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
@@ -71,7 +65,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: terraform plan
       working-directory: ./terraform
 
     - name: Writing vars file for ansible start container role
@@ -93,6 +87,5 @@ jobs:
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      run: terraform apply -auto-approve
       working-directory: ./terraform
