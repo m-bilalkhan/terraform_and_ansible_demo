@@ -8,12 +8,7 @@ variable "vpc_cidr_block" {
 variable "subnet_cidr_block" {}
 variable "availability_zone" {}
 variable "env_prefix" {}
-variable "allowed_ips" {
-  description = "List of IPs allowed to access the server via SSH"
-  type    = list(string)
-}
 variable "instance_type" {}
-variable "ssh_key" {}
 
 resource "aws_vpc" "demo-app-vpc" {
   cidr_block           = var.vpc_cidr_block
@@ -60,14 +55,6 @@ resource "aws_security_group" "demo-app-sg" {
   vpc_id = aws_vpc.demo-app-vpc.id
 
   //Rules
-  ingress { //ingress for incoming request
-    //It's a range of ports can be 0 to 1000 if we want
-    from_port   = 22
-    to_port     = 22
-    protocol    = "TCP"
-    cidr_blocks = var.allowed_ips
-  }
-
   ingress {
     from_port   = 8080
     to_port     = 8080
@@ -118,22 +105,21 @@ resource "aws_instance" "myapp-server" {
   vpc_security_group_ids      = [aws_security_group.demo-app-sg.id]
   availability_zone           = var.availability_zone
   associate_public_ip_address = true
-  key_name                    = var.ssh_key
 
   tags = {
     Name : "${var.env_prefix}-server"
   }
 }
 
-resource "null_resource" "configure_server" {
-  triggers = {
-    server_ip = aws_instance.myapp-server.public_ip
-  }
-  provisioner "local-exec" {
-    working_dir = "../ansible/"
-    command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa -u ec2-user -e ansible_python_interpreter=/usr/bin/python3 playbook.yaml"
-  }
-}
+# resource "null_resource" "configure_server" {
+#   triggers = {
+#     server_ip = aws_instance.myapp-server.public_ip
+#   }
+#   provisioner "local-exec" {
+#     working_dir = "../ansible/"
+#     command = "ansible-playbook --inventory '${aws_instance.myapp-server.public_ip}', --private-key ~/.ssh/id_rsa -u ec2-user -e ansible_python_interpreter=/usr/bin/python3 playbook.yaml"
+#   }
+# }
 
 output "ec2_public_ip" {
   value = aws_instance.myapp-server.public_ip

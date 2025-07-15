@@ -21,13 +21,13 @@ jobs:
         shell: bash
 
     steps:
-    - name: Fail if not on main branch
-      run: |
-        echo "Branch: ${GITHUB_REF##*/}"
-        if [ "${GITHUB_REF##*/}" != "main" ]; then
-          echo "⛔ This workflow can only be run on the main branch."
-          exit 1
-        fi
+    # - name: Fail if not on main branch
+    #   run: |
+    #     echo "Branch: ${GITHUB_REF##*/}"
+    #     if [ "${GITHUB_REF##*/}" != "main" ]; then
+    #       echo "⛔ This workflow can only be run on the main branch."
+    #       exit 1
+    #     fi
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
@@ -36,17 +36,11 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
         
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4.1.0
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
       with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.GITHUB_OIDC_ROLE_NAME }}
         aws-region: ap-south-1
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-    - name: Get GitHub runner IP
-      run: |
-        ip=$(curl -s https://checkip.amazonaws.com)
-        echo "RUNNER_IP=$(curl -s https://checkip.amazonaws.com)/32" >> $GITHUB_ENV
 
     - name: Writing tfvars
       working-directory: ./terraform
@@ -56,9 +50,7 @@ jobs:
           subnet_cidr_block = "10.0.10.0/24"
           availability_zone = "ap-south-1a"
           env_prefix = "github-actions-dev"
-          allowed_ips = ["${{ secrets.MY_IP }}", "${{env.RUNNER_IP}}"]
           instance_type = "t2.micro"
-          ssh_key = "${{ secrets.SSH_KEY }}"
 
     - name: Get SSH KEY AND SET PERMISSION
       run: |
