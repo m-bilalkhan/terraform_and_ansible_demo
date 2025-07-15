@@ -6,6 +6,7 @@ on:
     branches: [ "aws_oidc_configration" ]
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
