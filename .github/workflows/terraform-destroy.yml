@@ -1,8 +1,11 @@
 name: Destroy Terraform Infrastructure
 
 on:
-  workflow_dispatch:
-    branches: main
+  workflow_dispatch: 
+    # branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
   destroy:
@@ -29,7 +32,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.GITHUB_OIDC_ROLE_NAME }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_NAME }}
           aws-region: ap-south-1
 
       - name: Terraform Init (reads remote state)
