@@ -35,12 +35,6 @@ jobs:
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-        
-    - name: Configure AWS credentials (OIDC)
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_NAME }}
-        aws-region: ap-south-1
 
     - name: Print resolved AWS credentials configuration for debug
       run: |
@@ -48,8 +42,13 @@ jobs:
         echo "DEBUG: OIDC_ROLE_NAME: ${{ secrets.OIDC_ROLE_NAME }}"
         echo "DEBUG: Resolved Role ARN: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_NAME }}"
         echo "DEBUG: AWS Region: ap-south-1"
-    
-    
+        
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.OIDC_ROLE_NAME }}
+        aws-region: ap-south-1
+
     - name: Writing tfvars
       working-directory: ./terraform
       run: |
